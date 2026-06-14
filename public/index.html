@@ -13,7 +13,7 @@
       color: white;
       padding: 20px;
     }
-    .container { max-width: 600px; margin: 0 auto; }
+    .container { max-width: 650px; margin: 0 auto; }
     header { text-align: center; padding: 40px 0 30px; }
     header .emoji { font-size: 64px; }
     header h1 {
@@ -49,28 +49,7 @@
       color: #f093fb;
       margin-bottom: 16px;
     }
-    .endpoint-row {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      background: rgba(0,0,0,0.25);
-      border-radius: 10px;
-      padding: 12px 14px;
-      margin-bottom: 10px;
-    }
-    .method {
-      background: linear-gradient(90deg, #f093fb, #f5576c);
-      color: white;
-      font-size: 11px;
-      font-weight: 700;
-      padding: 3px 10px;
-      border-radius: 6px;
-      min-width: 42px;
-      text-align: center;
-    }
-    .url { font-family: monospace; font-size: 13px; color: #a8ff78; }
-    .desc { font-size: 12px; color: rgba(255,255,255,0.35); margin-top: 5px; padding-left: 52px; }
-    .total-box { text-align: center; padding: 16px; }
+    .total-box { text-align: center; padding: 10px; }
     .total-box .number {
       font-size: 48px;
       font-weight: 800;
@@ -79,12 +58,106 @@
       -webkit-text-fill-color: transparent;
     }
     .total-box .label { font-size: 13px; color: rgba(255,255,255,0.4); margin-top: 4px; }
+
+    /* Add form */
+    .input-row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .input-row input {
+      flex: 1;
+      padding: 12px 16px;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.15);
+      background: rgba(255,255,255,0.08);
+      color: white;
+      font-size: 13px;
+      outline: none;
+    }
+    .input-row input::placeholder { color: rgba(255,255,255,0.3); }
+    .btn {
+      padding: 12px 20px;
+      border: none;
+      border-radius: 10px;
+      background: linear-gradient(90deg, #f093fb, #f5576c);
+      color: white;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: opacity 0.2s;
+      white-space: nowrap;
+    }
+    .btn:hover { opacity: 0.85; }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn-full {
+      width: 100%;
+      padding: 14px;
+      margin-top: 6px;
+    }
+    .msg {
+      margin-top: 10px;
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-size: 13px;
+      display: none;
+    }
+    .msg.success { background: rgba(168,255,120,0.15); color: #a8ff78; border: 1px solid rgba(168,255,120,0.3); }
+    .msg.error { background: rgba(255,80,80,0.15); color: #ff8080; border: 1px solid rgba(255,80,80,0.3); }
+
+    /* Video grid */
+    .video-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 10px;
+    }
+    .video-item {
+      background: rgba(0,0,0,0.3);
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.1);
+      position: relative;
+    }
+    .video-item video {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+      display: block;
+    }
+    .video-item .video-num {
+      position: absolute;
+      top: 6px;
+      left: 8px;
+      background: rgba(0,0,0,0.6);
+      padding: 2px 8px;
+      border-radius: 20px;
+      font-size: 11px;
+      color: #f093fb;
+    }
+    .load-more {
+      width: 100%;
+      padding: 12px;
+      margin-top: 14px;
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 10px;
+      background: rgba(255,255,255,0.05);
+      color: white;
+      font-size: 14px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .load-more:hover { background: rgba(255,255,255,0.1); }
+    .empty { text-align: center; color: rgba(255,255,255,0.3); padding: 20px; font-size: 14px; }
+
     footer { text-align: center; padding: 30px 0 20px; font-size: 12px; color: rgba(255,255,255,0.2); }
     footer a { color: #f093fb; text-decoration: none; }
   </style>
 </head>
 <body>
 <div class="container">
+
+  <!-- Header -->
   <header>
     <div class="emoji">🎬</div>
     <h1>RV API</h1>
@@ -92,25 +165,7 @@
     <span class="badge">● Live</span>
   </header>
 
-  <div class="card">
-    <h2>📡 Endpoints</h2>
-    <div class="endpoint-row">
-      <span class="method">GET</span>
-      <span class="url">/api/rv</span>
-    </div>
-    <div class="desc">Random video return করে</div>
-    <div class="endpoint-row" style="margin-top:10px">
-      <span class="method">GET</span>
-      <span class="url">/api/list</span>
-    </div>
-    <div class="desc">মোট কতটা video আছে</div>
-    <div class="endpoint-row" style="margin-top:10px">
-      <span class="method">POST</span>
-      <span class="url">/api/add</span>
-    </div>
-    <div class="desc">নতুন video add করে</div>
-  </div>
-
+  <!-- Total count -->
   <div class="card">
     <h2>📊 Total Videos</h2>
     <div class="total-box">
@@ -119,13 +174,46 @@
     </div>
   </div>
 
+  <!-- Add video -->
+  <div class="card">
+    <h2>➕ Add New Video</h2>
+    <div class="input-row">
+      <input type="text" id="videoUrl" placeholder="https://i.imgur.com/xxx.mp4" />
+    </div>
+    <div class="input-row">
+      <input type="password" id="secretKey" placeholder="Secret key দাও" />
+      <button class="btn" onclick="addVideo()">Add</button>
+    </div>
+    <div class="msg" id="addMsg"></div>
+  </div>
+
+  <!-- Video list -->
+  <div class="card">
+    <h2>🎬 All Videos</h2>
+    <div class="video-grid" id="videoGrid">
+      <div class="empty">Loading...</div>
+    </div>
+    <button class="load-more" id="loadMoreBtn" onclick="loadMore()" style="display:none">
+      আরো দেখাও
+    </button>
+  </div>
+
   <footer>
     © 2025 Rocky •
     <a href="https://github.com/oldacountrocky303-ship-it/rv-api" target="_blank">GitHub</a>
   </footer>
+
 </div>
+
 <script>
+  let allVideos = [];
+  let shown = 6;
+
   window.onload = async () => {
+    await loadVideos();
+  };
+
+  async function loadVideos() {
     try {
       const res = await fetch("/api/list");
       const data = await res.json();
@@ -133,7 +221,81 @@
     } catch(e) {
       document.getElementById("totalCount").textContent = "?";
     }
-  };
+
+    try {
+      // GitHub থেকে সব video load করো
+      const res = await fetch("https://raw.githubusercontent.com/oldacountrocky303-ship-it/rv-api/main/data/videos.json");
+      allVideos = await res.json();
+      renderVideos();
+    } catch(e) {
+      document.getElementById("videoGrid").innerHTML = '<div class="empty">Video load হয়নি</div>';
+    }
+  }
+
+  function renderVideos() {
+    const grid = document.getElementById("videoGrid");
+    const loadBtn = document.getElementById("loadMoreBtn");
+
+    if (allVideos.length === 0) {
+      grid.innerHTML = '<div class="empty">কোনো video নেই</div>';
+      return;
+    }
+
+    const toShow = allVideos.slice(0, shown);
+    grid.innerHTML = toShow.map((v, i) => `
+      <div class="video-item">
+        <video src="${v.url}" controls muted playsinline></video>
+        <div class="video-num">#${i + 1}</div>
+      </div>
+    `).join("");
+
+    loadBtn.style.display = shown < allVideos.length ? "block" : "none";
+  }
+
+  function loadMore() {
+    shown += 6;
+    renderVideos();
+  }
+
+  async function addVideo() {
+    const videoUrl = document.getElementById("videoUrl").value.trim();
+    const secret = document.getElementById("secretKey").value.trim();
+    const msg = document.getElementById("addMsg");
+
+    if (!videoUrl || !secret) {
+      showMsg("⚠️ Video link আর secret key দাও!", "error");
+      return;
+    }
+
+    showMsg("⏳ Adding...", "success");
+
+    try {
+      const res = await fetch("/api/add", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ videoUrl, secret })
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        showMsg(`✅ Video add হয়েছে! Total: ${data.total}`, "success");
+        document.getElementById("videoUrl").value = "";
+        await loadVideos();
+      } else {
+        showMsg(`❌ ${data.error}`, "error");
+      }
+    } catch(e) {
+      showMsg("❌ Error: " + e.message, "error");
+    }
+  }
+
+  function showMsg(text, type) {
+    const msg = document.getElementById("addMsg");
+    msg.textContent = text;
+    msg.className = `msg ${type}`;
+    msg.style.display = "block";
+  }
 </script>
 </body>
 </html>
