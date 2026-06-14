@@ -6,7 +6,7 @@ const FILE_PATH = "data/videos.json";
 
 const BLOCKED_KEYWORDS = [
   "sex", "porn", "nude", "naked", "xxx", "adult",
-  "nsfw", "18+", "explicit", "erotic", "hentai"
+  "nsfw", "explicit", "erotic", "hentai"
 ];
 
 module.exports = async (req, res) => {
@@ -33,43 +33,19 @@ module.exports = async (req, res) => {
     return res.status(400).json({ error: "videoUrl required" });
   }
 
-  if (!videoUrl.match(/^https?:\/\/i\.imgur\.com\/.+\.(mp4|gif|gifv)$/i)) {
+  // শুধু Imgur link allow
+  if (!videoUrl.match(/^https?:\/\/i\.imgur\.com\/.+/i)) {
     return res.status(400).json({
-      error: "❌ শুধু i.imgur.com এর video link দেওয়া যাবে!\nExample: https://i.imgur.com/xxx.mp4"
+      error: "❌ শুধু i.imgur.com এর link দেওয়া যাবে!"
     });
   }
 
+  // Blocked keyword check
   const lowerUrl = videoUrl.toLowerCase();
   const hasBlocked = BLOCKED_KEYWORDS.some(word => lowerUrl.includes(word));
   if (hasBlocked) {
     return res.status(400).json({
       error: "❌ এই ধরনের video add করা যাবে না!"
-    });
-  }
-
-  try {
-    const checkRes = await axios.head(videoUrl, {
-      timeout: 5000,
-      headers: { "User-Agent": "Mozilla/5.0" }
-    });
-
-    const contentType = checkRes.headers["content-type"] || "";
-    if (!contentType.includes("video") && !contentType.includes("image/gif")) {
-      return res.status(400).json({
-        error: "❌ Valid video link দাও! (mp4/gif)"
-      });
-    }
-
-    const contentLength = parseInt(checkRes.headers["content-length"] || "0");
-    if (contentLength > 0 && contentLength < 50000) {
-      return res.status(400).json({
-        error: "❌ Video file too small or invalid!"
-      });
-    }
-
-  } catch {
-    return res.status(400).json({
-      error: "❌ Video link access করা যাচ্ছে না!"
     });
   }
 
