@@ -1,7 +1,7 @@
 const axios = require("axios");
 
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
-const GITHUB_REPO = "oldacountrocky303-ship-it/rv-api";
+const GITHUB_REPO = "Rocky-mastermind/rv-api";
 const FILE_PATH = "data/videos.json";
 
 module.exports = async (req, res) => {
